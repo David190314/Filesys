@@ -1,29 +1,34 @@
-//Imports de los módulos
-//fs y path
+const fs = require('fs/promises');
+const path = require('path');
+const pathUser = path.resolve("users.json");
 
 const getUsers = async() => {
-    //Leer el archivo
-
-    //Regresar el arreglo de usuarios como objeto literal Javascript (sin notación JSON)
+    try{
+        const array = await fs.readFile(pathUser, {encoding: "utf8"});
+        return JSON.parse(array);
+    }catch(error){
+        return error
+    }
 };
 
 const addUser = async (userObj) => {
-    //leer el archivo 
-
-    //convertir el contenido en formato JSON en un objeto JS
-
-    //agregar el usuario en el arreglo
-
-    //sobreescribir el arreglo en el archivo
-
-    //si el proceso se realizó correctamente tendrás que regresar el objeto de usuario
-    //que acabas de agregar en el arreglo
+    try{
+        const array = await getUsers();
+        array.push(userObj);
+        await fs.writeFile(pathUser, JSON.stringify(array));
+        return userObj;
+    }catch(error){
+        return error
+    }
 };
 
 const clearUsers = async () => {
-    //Vaciar el arreglo y sobreescribir el archivo
-    
-    //Si el proceso se realizó correctamente tendrás que regresar true
+    try{
+        await fs.writeFile(pathUser, JSON.stringify([]));
+        return true;
+    }catch(error){
+        return true
+    }
 }
 
 module.exports = {
